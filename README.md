@@ -124,12 +124,16 @@ This project is open source and available under the [MIT License](LICENSE).
 - Font thanks to Google Fonts (Poppins)
 - Special thanks to all anime creators who inspire us daily
 
-## Future Enhancements
+## Contact
 
-Planned features for future releases:
-- Save favorite time presets
-- Multiple timer instances
-- Sound effects at critical moments
-- Theme customization (different anime genres)
-- Pause functionality
-- Share countdowns with friends
+Om Gedam
+
+GitHub: @itsomg134
+
+Email: omgedam123098@gmail.com
+
+Twitter (X): @omgedam
+
+LinkedIn: Om Gedam
+
+Portfolio: https://ogworks.lovable.app
