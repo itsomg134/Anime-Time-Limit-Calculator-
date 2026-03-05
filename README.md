@@ -2,7 +2,7 @@
 
 A magical, anime-themed countdown timer web application that brings the spirit of your favorite shows to time management. Whether you're tracking episode runtimes, study sessions, or just want a stylish way to count down, this tool has you covered.
 
-![Anime Time Limit Calculator Preview](https://via.placeholder.com/800x400/1a1f3a/bd93f9?text=Anime+Time+Limit+Calculator)
+![Screenshot_5-3-2026_224447_127 0 0 1](https://github.com/user-attachments/assets/6f8374c8-cd7d-4a41-933d-329d6f30ce97)
 
 ## Features
 
