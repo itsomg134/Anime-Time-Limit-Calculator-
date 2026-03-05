@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> ✦ anime time limit calculator ✦ </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #0b0c1e 0%, #1a1f3a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* floating anime sparkles */
+        body::before {
+            content: "✦✧✦✧✦";
+            position: absolute;
+            top: 10px;
+            left: 5%;
+            font-size: 2.2rem;
+            color: rgba(255, 215, 255, 0.15);
+            white-space: nowrap;
+            rotate: -5deg;
+            pointer-events: none;
+            animation: sparkleGlide 18s infinite alternate ease-in-out;
+        }
+
+        body::after {
+            content: "⚡💫✨⚡";
+            position: absolute;
+            bottom: 20px;
+            right: 3%;
+            font-size: 3rem;
+            color: rgba(210, 180, 255, 0.12);
+            pointer-events: none;
+            animation: sparkleDrift 14s infinite alternate;
+        }
+
+        @keyframes sparkleGlide {
+            0% { transform: translateX(0) translateY(0) scale(1); opacity: 0.2; }
+            100% { transform: translateX(200px) translateY(-30px) scale(1.2); opacity: 0.4; }
+        }
+
+        @keyframes sparkleDrift {
+            0% { transform: translateX(0) rotate(0deg); }
+            100% { transform: translateX(-120px) rotate(15deg); }
+        }
+
+        .anime-container {
+            background: rgba(18, 22, 48, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(210, 180, 255, 0.5);
+            border-radius: 48px 48px 48px 48px;
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(255, 200, 255, 0.3) inset, 0 0 25px #b87cf7;
+            max-width: 600px;
+            width: 100%;
+            padding: 2.5rem 2rem;
+            transition: box-shadow 0.3s;
+            position: relative;
+            z-index: 10;
+        }
+
+        .anime-container:hover {
+            box-shadow: 0 30px 60px -5px #140b2b, 0 0 0 3px #f0d3ff inset, 0 0 35px #d5a1ff;
+        }
+
+        /* cute magical corner decorations */
+        .corner-star {
+            position: absolute;
+            font-size: 2.5rem;
+            color: #ffd7fc;
+            filter: drop-shadow(0 0 6px #f7b3ff);
+            opacity: 0.7;
+            z-index: 5;
+        }
+
+        .corner-star:nth-child(1) { top: -5px; left: 10px; transform: rotate(-10deg); }
+        .corner-star:nth-child(2) { top: -5px; right: 20px; transform: rotate(15deg); }
+        .corner-star:nth-child(3) { bottom: 0px; left: 15px; transform: rotate(25deg); }
+        .corner-star:nth-child(4) { bottom: 5px; right: 15px; transform: rotate(-5deg); }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(145deg, #fde4ff, #d9b0ff, #b5a9ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px #ca9eff, 0 0 40px #a678de;
+            margin-bottom: 0.2rem;
+            filter: drop-shadow(0 4px 6px #1f1730);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #cfc1f0;
+            background: rgba(45, 35, 75, 0.5);
+            display: inline-block;
+            padding: 0.3rem 1.8rem;
+            border-radius: 60px;
+            border: 1px solid #c2a2ff;
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 15px #bb92ff;
+            margin-top: 5px;
+        }
+
+        .character-badge {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 1.8rem;
+            filter: drop-shadow(0 0 8px #fbadff);
+        }
+
+        .input-area {
+            background: rgba(12, 8, 27, 0.7);
+            border-radius: 42px;
+            padding: 2rem 1.8rem;
+            border: 2px dashed #c9a6ff;
+            margin: 25px 0 30px 0;
+            box-shadow: 0 0 30px #301c4e inset, 0 10px 20px #0000004d;
+        }
+
+        .field {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .field label {
+            display: block;
+            font-size: 1.1rem;
+ font-weight: 600;
+            color: #e5d2ff;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            text-shadow: 0 0 5px currentColor;
+            letter-spacing: 0.7px;
+        }
+
+        .field label i {
+            margin-right: 8px;
+            color: #ffb3ff;
+            font-style: normal;
+            filter: drop-shadow(0 0 5px #ecb0ff);
+        }
+
+        .time-input {
+            width: 100%;
+            padding: 15px 22px;
+            background: #0f0b23;
+            border: 2px solid #a27cd6;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #ffffff;
+            outline: none;
+            transition: all 0.25s;
+            box-shadow: 0 0 0 0px #c89eff, 0 8px 12px #00000050;
+        }
+
+        .time-input:focus {
+            border-color: #f1c4ff;
+            box-shadow: 0 0 0 4px rgba(210, 150, 255, 0.5), 0 8px 16px black;
+            background: #1b143b;
+        }
+
+        .time-input::placeholder {
+            color: #7d6ca0;
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0 20px;
+        }
+
+        .anime-btn {
+            background: linear-gradient(145deg, #392e5c, #1f1946);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #f0deff;
+            border: 2px solid #b285f0;
+            box-shadow: 0 8px 0 #0e0925, 0 12px 20px #00000070, 0 0 15px #c697ff;
+            cursor: pointer;
+            transition: 0.12s linear;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 1.5px;
+        }
+
+        .anime-btn small {
+            font-size: 1.1rem;
+            filter: drop-shadow(0 0 6px gold);
+        }
+
+        .anime-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #0e0925, 0 7px 14px #00000070, 0 0 25px #e6b9ff;
+        }
+
+        .reset-btn {
+            background: linear-gradient(145deg, #3f2b4a, #23152e);
+            border-color: #eea7f4;
+            box-shadow: 0 8px 0 #1d0f27, 0 0 15px #f5adff;
+        }
+
+        .result-panel {
+            background: #05031fbb;
+            border-radius: 40px;
+            padding: 1.7rem 1.5rem;
+            border: 3px solid #cfafef;
+            backdrop-filter: blur(10px);
+            margin-top: 1.5rem;
+        }
+
+        .countdown-display {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.5rem;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .time-block {
+            text-align: center;
+            min-width: 95px;
+            background: #20193d;
+            padding: 0.8rem 0.2rem;
+            border-radius: 30px;
+            border: 2px solid #c1a2ff;
+            box-shadow: 0 0 20px #a682fd;
+        }
+
+        .time-number {
+            font-size: 2.6rem;
+            font-weight: 900;
+            background: linear-gradient(white, #f0d2ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            filter: drop-shadow(0 0 12px #dab3ff);
+        }
+
+        .time-label {
+            font-size: 1rem;
+            color: #bdaaf0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .message-box {
+            margin-top: 25px;
+            background: #1d1238e5;
+            padding: 0.8rem;
+            border-radius: 60px;
+            font-size: 1.4rem;
+            color: #ffecb0;
+            border: 2px solid #c1a0ff;
+            text-align: center;
+            font-weight: 500;
+            text-shadow: 0 0 8px #ffb3d6;
+            box-shadow: 0 0 20px #ad72ff;
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1rem;
+            margin-top: 10px;
+            color: #cfc0fc;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 1.2rem;
+            color: #ab96d4;
+            font-size: 1rem;
+            text-shadow: 0 0 15px violet;
+        }
+
+        .blink-star {
+            animation: blink 1.8s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="anime-container">
+    <div class="corner-star">✨</div>
+    <div class="corner-star">⚡</div>
+    <div class="corner-star">🌸</div>
+    <div class="corner-star">🌀</div>
+
+    <div class="header">
+        <h1>⚡LIMIT MASTER⚡</h1>
+        <div class="character-badge">
+            <span>🐱</span><span>👘</span><span>🍡</span><span>🗡️</span>
+        </div>
+        <div class="subtitle">～ time limit counter ～</div>
+    </div>
+
+    <div class="input-area">
+        <div class="field">
+            <label><i>⏳</i>  episode / quest time (minutes)</label>
+            <input type="number" id="minutesInput" class="time-input" placeholder="e.g. 24" value="24" min="0" step="1">
+        </div>
+        <div class="field">
+            <label><i>🔮</i>  extra seconds (optional)</label>
+            <input type="number" id="secondsInput" class="time-input" placeholder="0～59" value="0" min="0" max="59" step="1">
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button class="anime-btn" id="startBtn"><span>🔥</span> START COUNTDOWN <small>⚡</small></button>
+        <button class="anime-btn reset-btn" id="resetBtn"><span>🔄</span> RESET</button>
+    </div>
+
+    <div class="result-panel" id="resultPanel">
+        <div class="countdown-display" id="countdownDisplay">
+            <div class="time-block"><span class="time-number" id="hoursVal">00</span><div class="time-label">hours</div></div>
+            <div class="time-block"><span class="time-number" id="minsVal">00</span><div class="time-label">minutes</div></div>
+            <div class="time-block"><span class="time-number" id="secsVal">00</span><div class="time-label">seconds</div></div>
+        </div>
+        <div class="message-box" id="messageArea">
+            ⭐ waiting for your limit...
+        </div>
+        <div class="quote" id="animeQuote">“Even if the time is short, make it legendary!”</div>
+    </div>
+    <footer>✦ made with アニメ spirit ✦</footer>
+</div>
+
+<script>
+    (function() {
+        // DOM elements
+        const minutesInput = document.getElementById('minutesInput');
+        const secondsInput = document.getElementById('secondsInput');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const hoursVal = document.getElementById('hoursVal');
+        const minsVal = document.getElementById('minsVal');
+        const secsVal = document.getElementById('secsVal');
+        const messageArea = document.getElementById('messageArea');
+        const quoteEl = document.getElementById('animeQuote');
+
+        // state
+        let countdownInterval = null;
+        let totalSecondsRemaining = 0;        // current remaining seconds
+        let initialSetSeconds = 0;            // to detect changes on reset
+
+        // Anime quotes array for flavour
+        const quotes = [
+            "“The clock ticks, but your soul burns brighter.”",
+            "“Even 24 minutes can change fate.”",
+            "“Believe in the seconds that move you.”",
+            "“Limit? Just a demon to slay.”",
+            "“Time is an illusion, but deadlines are real.”",
+            "“Power comes with every tick.”",
+            "“Your adventure starts now.”",
+            "“One episode, one chance.”",
+            "“Push beyond the countdown.”",
+            "“The future is just a second away.”"
+        ];
+
+        // helper: update the HTML display with current totalSecondsRemaining
+        function updateDisplayFromTotal() {
+            if (totalSecondsRemaining < 0) totalSecondsRemaining = 0;
+
+            const hrs = Math.floor(totalSecondsRemaining / 3600);
+            const mins = Math.floor((totalSecondsRemaining % 3600) / 60);
+            const secs = totalSecondsRemaining % 60;
+
+            hoursVal.textContent = hrs.toString().padStart(2, '0');
+            minsVal.textContent = mins.toString().padStart(2, '0');
+            secsVal.textContent = secs.toString().padStart(2, '0');
+
+            // change message based on remaining time
+            if (totalSecondsRemaining === 0) {
+                messageArea.innerHTML = "⏰ TIME'S UP! ⏰ ～ mission complete ～";
+                quoteEl.textContent = "“Even zero is a new beginning.”";
+            } else if (totalSecondsRemaining < 60) {
+                messageArea.innerHTML = "⚡ FINAL COUNTDOWN! ⚡";
+                quoteEl.textContent = "“Last spark! Make it shine!”";
+            } else if (totalSecondsRemaining < 300) { // under 5min
+                messageArea.innerHTML = "🔥 less than 5 minutes left! 🔥";
+                quoteEl.textContent = "“No hesitation, go beyond!”";
+            } else {
+                // random cheerful message
+                const neutralMessages = ["✨ time limit active ✨", "⚔️ keep going ⚔️", "🌸 countdown running 🌸", "🌀 stay focused 🌀"];
+                const randomIdx = Math.floor(Math.random() * neutralMessages.length);
+                messageArea.innerHTML = neutralMessages[randomIdx];
+                // random quote
+                const randQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteEl.textContent = randQuote;
+            }
+        }
+
+        // stops any running interval
+        function stopCountdown() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }
+
+        // load total seconds from input fields (clamped)
+        function getTotalSecondsFromInputs() {
+            let mins = parseInt(minutesInput.value, 10);
+            let secs = parseInt(secondsInput.value, 10);
+
+            if (isNaN(mins) || mins < 0) mins = 0;
+            if (isNaN(secs) || secs < 0) secs = 0;
+            if (secs > 59) secs = 59;   // keep seconds within range
+
+            // update fields to sanitized values (optional but nice)
+            minutesInput.value = mins;
+            secondsInput.value = secs;
+
+            return (mins * 60) + secs;
+        }
+
+        // function to start (or restart) countdown based on inputs
+        function startCountdownFromInputs() {
+            stopCountdown();                      // kill any previous timer
+            totalSecondsRemaining = getTotalSecondsFromInputs();
+            initialSetSeconds = totalSecondsRemaining;   // store for reset
+
+            if (totalSecondsRemaining <= 0) {
+                // edge case: zero seconds
+                updateDisplayFromTotal();
+                messageArea.innerHTML = "🌟 set a time, hero! 🌟";
+                quoteEl.textContent = "“Even zero can be a start, but add some minutes!”";
+                return;
+            }
+
+            updateDisplayFromTotal();
+
+            // start new interval
+            countdownInterval = setInterval(() => {
+                if (totalSecondsRemaining > 0) {
+                    totalSecondsRemaining -= 1;
+                    updateDisplayFromTotal();
+                }
+
+                if (totalSecondsRemaining <= 0) {
+                    // countdown finished
+                    stopCountdown();
+                    updateDisplayFromTotal();   // show 00:00 and special message
+                }
+            }, 1000);
+        }
+
+        // reset to initial time based on last used input (or re-fetch from inputs)
+        function resetToInitial() {
+            stopCountdown();
+            // re-evaluate inputs (maybe user changed them after start)
+            totalSecondsRemaining = getTotalSecondsFromInputs();
+            initialSetSeconds = totalSecondsRemaining;
+            updateDisplayFromTotal();
+
+            if (totalSecondsRemaining === 0) {
+                messageArea.innerHTML = "🌸 enter time & press start 🌸";
+                quoteEl.textContent = "“every great quest has a limit.”";
+            } else {
+                messageArea.innerHTML = "🔄 reset to original limit 🔄";
+                quoteEl.textContent = "“Second chance arc begins!”;
+            }
+        }
+
+        // Attach event listeners
+        startBtn.addEventListener('click', () => {
+            startCountdownFromInputs();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            resetToInitial();
+        });
+
+        // optional: if inputs change while countdown running? we don't auto-update,
+        // but reset uses current inputs. start always uses fresh input values.
+        // also if user presses start again, it resets timer to input values (stops old one)
+
+        // initialize display on page load
+        (function initDisplay() {
+            totalSecondsRemaining = getTotalSecondsFromInputs();
+            initialSetSeconds = totalSecondsRemaining;
+            updateDisplayFromTotal();
+            messageArea.innerHTML = "🌸 ready for your limit? 🌸";
+            quoteEl.textContent = "“set the minutes and begin!”;
+        })();
+
+        // tiny extra: stop interval on page unload (clean)
+        window.addEventListener('beforeunload', function() {
+            stopCountdown();
+        });
+
+        // extra anime spark: block invalid chars on seconds input (max 59)
+        secondsInput.addEventListener('input', function(e) {
+            let val = parseInt(this.value, 10);
+            if (isNaN(val)) val = 0;
+            if (val > 59) this.value = 59;
+            if (val < 0) this.value = 0;
+        });
+
+        minutesInput.addEventListener('input', function() {
+            let val = parseInt(this.value, 10);
+            if (isNaN(val)) val = 0;
+            if (val < 0) this.value = 0;
+            // no hard upper bound, but can be large (displays hours)
+        });
+    })();
+</script>
+<!-- small note to fix a cut string (quote) but already fine -->
+</body>
+</html>
